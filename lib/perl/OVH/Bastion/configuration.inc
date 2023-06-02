@@ -812,8 +812,9 @@ sub plugin_config {
 
             # do we have a config validator for this plugin?
             ## no critic(Modules::RequireBarewordIncludes)
-            eval { require "OVH::Bastion::Plugin::$plugin"; };
+            eval { require "OVH/Bastion/Plugin/$plugin.pm"; };
             if (!$@) {
+                osh_debug("We have a config validator for $plugin");
                 my $validator = "OVH::Bastion::Plugin::${plugin}::validate_config";
                 $fnret = $validator->(config => \%config);
                 if (!$fnret || !$fnret->value) {
@@ -821,6 +822,10 @@ sub plugin_config {
                     return R('ERR_INVALID_CONFIGURATION', msg => "Plugin configuration is invalid");
                 }
                 %config = %{$fnret->value};
+                osh_debug("Configuration for $plugin is valid");
+            }
+            else {
+                osh_debug("We don't have a config validator for $plugin ($@)");
             }
         }
         else {

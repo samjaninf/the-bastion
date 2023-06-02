@@ -122,7 +122,14 @@ testsuite_selfaccesses()
     json .command   selfAddPersonalAccess .error_code   OK_NO_CHANGE .value null
 
     # test selfAddPersonalAccess config items
-    success selfAddPersonalAccess_setconfig1 $r0 "echo '\{\\\"self_remote_user_only\\\":true\,\\\"widest_v4_prefix\\\":30\}' \> $opt_remote_etc_bastion/plugin.selfAddPersonalAccess.conf \; chmod o+r $opt_remote_etc_bastion/plugin.selfAddPersonalAccess.conf"
+    success selfAddPersonalAccess_setconfig_invalid $r0 "echo '\{\\\"self_remote_user_only\\\":true\,\\\"widest_v4_prefix\\\":99\}' \> $opt_remote_etc_bastion/plugin.selfAddPersonalAccess.conf \; chmod o+r $opt_remote_etc_bastion/plugin.selfAddPersonalAccess.conf"
+
+    run selfAddPersonalAccess_invalid_config $a0 --osh selfAddPersonalAccess --host 127.0.0.9 --user-any --port-any
+    retvalshouldbe 106
+    json .error_code KO_PLUGIN_DISABLED
+    contain "configuration error"
+
+    success selfAddPersonalAccess_setconfig_valid $r0 "echo '\{\\\"self_remote_user_only\\\":true\,\\\"widest_v4_prefix\\\":30\}' \> $opt_remote_etc_bastion/plugin.selfAddPersonalAccess.conf \; chmod o+r $opt_remote_etc_bastion/plugin.selfAddPersonalAccess.conf"
 
     plgfail selfAddPersonalAccess_self_remote_user_only $a0 --osh selfAddPersonalAccess --host 127.0.0.9 --user notme --port-any
     json .error_code ERR_INVALID_PARAMETER

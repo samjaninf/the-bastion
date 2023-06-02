@@ -141,7 +141,7 @@ EOS
     # now that we have several keys, take the opportunity to test force-key
 
     plgfail a1_add_access_force_key_and_pwd_g1 $a1 --osh groupAddServer --host 127.1.2.3 --user-any --port-any --force --force-password '$1$2$3456' --force-key "$key1fp" --group $group1
-    .error_code ERR_CONFLICTING_PARAMETERS
+    json .error_code ERR_CONFLICTING_PARAMETERS
 
     success a1_add_access_force_key_g1 $a1 --osh groupAddServer --host 127.1.2.3 --user-any --port-any --force --force-key "$key1fp" --group $group1
 
