@@ -319,10 +319,10 @@ foreach my $access (@{$fnret->value || []}) {
     }
 }
 
-osh_debug("Checking access 2/2 of $self to $userToCheck of $machine...");
+osh_debug("Checking access 2/2 of $self to $user of $machine...");
 $fnret = OVH::Bastion::is_access_granted(
     account        => $self,
-    user           => $userToCheck,
+    user           => $user,
     ipfrom         => $ENV{'OSH_IP_FROM'},
     ip             => $ip,
     port           => $port,
